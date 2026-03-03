@@ -23,7 +23,12 @@ function getFiles() {
 
 
 function processCommand(command) {
-    switch (command) {
+
+    const parts = command.split(' ');
+    const baseCommand = parts[0].toLowerCase(); // основная команда в нижнем регистре
+    const args = parts.slice(1);
+
+    switch (baseCommand) {
         case 'exit':
             process.exit(0);
             break;
@@ -32,6 +37,14 @@ function processCommand(command) {
             break;
         case 'important':
             getImportant();
+            break;
+        case 'user':
+            if (args.length === 0) {
+                console.log('Нет имена пользователя');
+            } else {
+                const username = args.join(' ').toLowerCase();
+                getByName(username);
+            }
             break;
         default:
             console.log('wrong command');
@@ -49,6 +62,18 @@ function getImportant(){
     for (let todo of todos) {
         if (todo.includes("!")) {
             console.log(todo);
+        }
+    }
+}
+
+function getByName(n){
+    for (let todo of todos) {
+        if (todo.includes(";")) {
+            let n_todo = todo.split(';');
+            let name = n_todo[0].replace("// TODO ","");
+            if (name === n){
+                console.log(todo);
+            }
         }
     }
 }
