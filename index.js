@@ -88,7 +88,7 @@ function processCommand(command) {
                         result.push(name_todo)
                     }
                 }
-                console.log(result)
+                newView(result);
             }
             break;
 
