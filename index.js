@@ -13,6 +13,14 @@ for (let file of files) {
     }
 }
 
+let name_todos = []
+for (let todo of todos) {
+    if (todo.includes(";")) {
+        name_todos.push(todo);
+    }
+}
+
+
 console.log('Please, write your command!');
 readLine(processCommand);
 
@@ -44,6 +52,25 @@ function processCommand(command) {
             } else {
                 const username = args.join(' ').toLowerCase();
                 getByName(username);
+            }
+            break;
+        case 'sort':
+            if (args.length === 0) {
+                console.log('Нет параметра');
+            } else {
+                const param = args.join(' ');
+                if (param === "importance") {
+                    todos.sort(sortImportance);
+                    console.log(todos);
+                }
+                if (param === "user") {
+                    name_todos.sort(sortName);
+                    console.log(name_todos);
+                }
+                if (param === "date") {
+                    name_todos.sort(sortDate);
+                    console.log(name_todos);
+                }
             }
             break;
         default:
@@ -78,10 +105,22 @@ function getByName(n){
     }
 }
 
+function sortName(a, b){
+    a = a.split(";")[0].replace("// TODO ","");
+    b = b.split(";")[0].replace("// TODO ","");
+    return (a.localeCompare(b));
+}
+
+function sortDate(a, b){
+    a = a.split(";")[1].trimEnd();
+    b = b.split(";")[1].trimEnd();
+    return (new Date(b) - new Date(a));
+}
+
 function sortImportance(a, b){
-    if (countExclamations(a) > countExclamations(b)) return 1;
+    if (countExclamations(a) > countExclamations(b)) return -1;
     if (countExclamations(a) === countExclamations(b)) return 0;
-    if (countExclamations(a) < countExclamations(b)) return -1;
+    if (countExclamations(a) < countExclamations(b)) return 1;
 }
 
 function countExclamations(str) {
