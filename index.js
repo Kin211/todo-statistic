@@ -36,7 +36,7 @@ function getFiles() {
 function processCommand(command) {
 
     const parts = command.split(' ');
-    const baseCommand = parts[0].toLowerCase(); // основная команда в нижнем регистре
+    const baseCommand = parts[0].toLowerCase();
     const args = parts.slice(1);
 
     switch (baseCommand) {
@@ -64,15 +64,15 @@ function processCommand(command) {
                 const param = args.join(' ');
                 if (param === "importance") {
                     todos.sort(sortImportance);
-                    console.log(todos);
+                    newView(todos);
                 }
                 if (param === "user") {
                     name_todos.sort(sortName);
-                    console.log(name_todos);
+                    newView(name_todos);
                 }
                 if (param === "date") {
                     name_todos.sort(sortDate);
-                    console.log(name_todos);
+                    newView(name_todos);
                 }
             }
             break;
@@ -84,14 +84,14 @@ function processCommand(command) {
 
 function getToDo() {
     for (let todo of todos) {
-            console.log(todo);
+            console.log(newString(todo));
         }
 }
 
 function getImportant(){
     for (let todo of todos) {
         if (todo.includes("!")) {
-            console.log(todo);
+            console.log(newString(todo));
         }
     }
 }
@@ -102,7 +102,7 @@ function getByName(n){
             let n_todo = todo.split(';');
             let name = n_todo[0].replace("// TODO ","");
             if (name === n){
-                console.log(todo);
+                console.log(newString(todo));
             }
         }
     }
@@ -136,3 +136,42 @@ function countExclamations(str) {
     return count;
 }
 
+function newString(commentString) {
+    let str = commentString.trim();
+    str = str.replace("// TODO ", '');
+
+    const parts = str.split(';', 3);
+    while (parts.length < 3) parts.push('');
+
+    const author = parts[0].trim();
+    const date = parts[1].trim();
+    const text = parts[2].trim();
+
+    const hasExclamation = text.includes('!');
+    const firstCol = hasExclamation ? '!' : '';
+
+    const truncate = (s, maxWidth) => {
+        if (s.length <= maxWidth) return s;
+        if (maxWidth <= 3) return s.slice(0, maxWidth);
+        return s.slice(0, maxWidth - 3) + '...';
+    };
+
+    const authorCol = truncate(author, 10);
+    const dateCol = truncate(date, 10);
+    const textCol = truncate(text, 50);
+
+    return firstCol.padEnd(1) + '  |  ' +
+        authorCol.padEnd(10) + '  |  ' +
+        dateCol.padEnd(10) + '  |  ' +
+        textCol.padEnd(50);
+}
+
+function newView(commentsArray) {
+    let newCom = commentsArray.map(newString)
+    for (let comment of newCom) {
+        if (comment === undefined) {
+            continue;
+        }
+        console.log(comment);
+    }
+}
