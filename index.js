@@ -76,6 +76,22 @@ function processCommand(command) {
                 }
             }
             break;
+        case 'date':
+            if (args.length === 0) {
+                console.log('нет параметров')
+            }else{
+                let result = []
+                const param = args.join(' ');
+                for (const name_todo of name_todos) {
+                    const date = new Date(name_todo.split(";")[1].trimEnd());
+                    if (date - parseDate(param) > 0){
+                        result.push(name_todo)
+                    }
+                }
+                console.log(result)
+            }
+            break;
+
         default:
             console.log('wrong command');
             break;
@@ -174,4 +190,14 @@ function newView(commentsArray) {
         }
         console.log(comment);
     }
+}
+
+function parseDate(dateString) {
+    const parts = dateString.split('-').map(Number);
+
+    const year = parts[0];
+    const month = parts.length >= 2 ? parts[1] - 1 : 0;
+    const day = parts.length >= 3 ? parts[2] : 1;
+
+    return new Date(year, month, day);
 }
