@@ -77,3 +77,20 @@ function getByName(n){
         }
     }
 }
+
+function sortImportance(a, b){
+    if (countExclamations(a) > countExclamations(b)) return 1;
+    if (countExclamations(a) === countExclamations(b)) return 0;
+    if (countExclamations(a) < countExclamations(b)) return -1;
+}
+
+function countExclamations(str) {
+    let count = 0;
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === '!') {
+            count++;
+        }
+    }
+    return count;
+}
+
