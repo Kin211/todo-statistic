@@ -4,6 +4,9 @@ const {readLine} = require('./console');
 const files = getFiles();
 let todos = [];
 for (let file of files) {
+    if (file.startsWith('const {getAllFilePathsWithExtension, readFile} = require(\'./fileSystem\');')) {
+        continue
+    }
     file = file.split('\n');
     for (let line of file) {
         let ind = line.indexOf('// TODO');
